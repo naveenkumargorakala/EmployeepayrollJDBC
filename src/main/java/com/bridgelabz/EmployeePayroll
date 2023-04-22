@@ -1,0 +1,109 @@
+create database payroll_service;
+show databases;
+use payroll_service;
+
+create table employee_payroll (id int not null auto_increment primary key,
+                                      name varchar(20) not null,
+       								  salary double not null,
+       								  start_date date not null);
+
+insert into employee_payroll values(1 ,"Pratham" ,60000, '2023-02-21');
+insert into employee_payroll values(2 ,"Anuroop" ,56000, '2022-12-01');
+insert into employee_payroll values(4, "Santosh" ,50000, '2020-06-20');
+insert into employee_payroll values(3,"Bhagi" ,70000, '2021-10-15');
+
+select * from employee_payroll;
+
+select salary from employee_payroll where name = "Bhagi";
+select * from employee_payroll where start_date between cast('2021-09-09' AS Date) and Date(now());
+
+update employee_payroll set gender = 'M' where name ='Pratham' or name ='Anuroop' or name = 'Santosh';
+update employee_payroll set gender = 'F' where name = 'Bhagi';
+select * from employee_payroll;
+
+select SUM(salary) from employee_payroll where gender = 'M' group by gender;
+select Avg(salary) from employee_payroll where gender = 'F' group by gender;
+select min(Salary) from employee_payroll where gender = 'M' group by gender;
+select max(Salary) from employee_payroll where gender = 'M' group by gender;
+select count(Salary) from employee_payroll where gender = 'M' group by gender;
+
+alter table employee_payroll
+       add PhoneNumber double,
+       add address varchar(100) default 'Narayana puram',
+       add department varchar(10) not null;
+
+alter table employee_payroll
+        add Basic_pay double ,
+        add Deductions double,
+        add Taxable_pay double,
+        add Income_tax double,
+        add Net_pay double;
+
+update employee_payroll set department ="Sales" where id = 2 or id=3;
+insert into employee_payroll values(7, "Bhagi", 65000, '2023-11-22', 'F', 7678789877,'HPM','Marketing',65000,5000,2000,1000, 57000);
+select * from employee_payroll;
+
+select * from employee_payroll where name = "Bhagi";
+
+
+create table employee(
+             emp_id int auto_increment ,
+             emp_name varchar(30) not null,
+             emp_phone double not null,
+             emp_email varchar(50) not null,
+             emp_address varchar(100) not null,
+             primary key(emp_id));
+Alter table employee
+add start_date date not null;
+alter table employee
+add gender varchar(10) not null after emp_name;
+alter table employee
+add salary double after emp_email;
+create table department (
+			department_id int,
+			department varchar(30) NOT NULL,
+			employee_id int,
+			FOREIGN KEY (employee_id) REFERENCES employee(emp_id),
+            primary key(department_id));
+
+
+create table company(company_id int not null auto_increment,
+                     company_name varchar(30) not null,
+                     employee_id int ,
+                     foreign key (employee_id) references employee(emp_id),
+                     primary key(company_id));
+
+create table payroll( payroll_id int not null auto_increment,
+                      Basic_pay double not null,
+                      Deductions double not null,
+                      taxable_pay double not null,
+                      Income_tax double not null,
+                      Net_pay double not null,
+                      employee_id int,
+                      foreign key (employee_id) REFERENCES employee(emp_id),
+                      primary key(payroll_id));
+
+
+insert into employee(emp_name, gender ,emp_phone,emp_email,emp_address,start_date)
+values("Sarvesh","M",989789788978,"sarveesh@gmail.com","Delhi",'2021-08-22'),
+("Prathamesh","M",8987563672,"Prathamesh@gmail.com","kolkata",'2022-09-11'),
+( "sushma","F",786980089,"sushma@gmail.com","Kolkata",'2020-08-22'),
+("Rutika","F",897234322,"rutika@gmail.com","Hyd",'2022-09-13'),
+("Vaibhav","M",656098789,"vaibhav@gmail.com","Hyd",'2021-07-21');
+select * from employee;
+update employee set salary=70000 where emp_id =1;
+update employee set salary=75000 where emp_id =2;
+update employee set salary=60000 where emp_id =3;
+update employee set salary=55000 where emp_id =4;
+update employee set salary=65000 where emp_id =5;
+
+select salary from employee where emp_name ="Rutika";
+
+select * from employee where start_date between cast('2021-09-09' AS Date) and Date(now());
+delete from employee where emp_id=6 or emp_id = 7 or emp_id=8 or emp_id = 9 or emp_id =10;
+
+select SUM(salary) from employee where gender = 'M' group by gender;
+select Avg(salary) from employee where gender = 'F' group by gender;
+select min(Salary) from employee where gender = 'M' group by gender;
+select max(Salary) from employee where gender = 'M' group by gender;
+select count(Salary) from employee where gender = 'M' group by gender;
