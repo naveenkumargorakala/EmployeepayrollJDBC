@@ -4,7 +4,7 @@ import java.sql.*;
 import java.util.Enumeration;
 
 public class EmployeePayroll {
-    public static void main(String[] args) throws SQLException,NullPointerException {
+    public static void main(String[] args) throws SQLException, NullPointerException {
 
 
         String dbUrl = "jdbc:mysql://localhost:3306/payroll_service";
@@ -25,23 +25,40 @@ public class EmployeePayroll {
 
 
         // Update teresa basepay to 300000;
-        PreparedStatement preparedStatement=null;
+        PreparedStatement statement = null;
+
         try {
-            conn.prepareStatement("update employee_payroll set Basepay=300000 where name='Teresa'");
-            System.out.println("Update Basepay of Teresa...");
+//            conn.prepareStatement("update employee_payroll set Basepay=300000 where name='Teresa'");
+//            System.out.println("Update Basepay of Teresa...");
+//            statement=conn.prepareStatement("select * from employee_payroll where name='Teresa'");
+//            System.out.println("retreive from table by use name...");
+              statement=conn.prepareStatement("select * from employee_payroll where start_date between '2021-12-23' and '2022-12-30'");
+            ResultSet resultSet=statement.executeQuery();
+            while(resultSet.next()) {
+                System.out.println();
+                System.out.print("Id: " + resultSet.getInt("id"));
+                System.out.print(", name: " + resultSet.getString("name"));
+                System.out.print(", Salary: " + resultSet.getDouble("salary"));
+                System.out.print(", Basepay: " + resultSet.getDouble("Basepay"));
+                System.out.println(", StartDate: "+ resultSet.getDate("start_date"));
+                System.out.println();
+            }
         }
         catch(NullPointerException e)
         {
             e.fillInStackTrace();
         }
-        ResultSet resultSet1=stmt.executeQuery("select * from employee_payroll");
-        while(resultSet1.next()){
-            System.out.print("Id: "+resultSet1.getInt("id"));
-            System.out.print(", name: "+resultSet1.getString("name"));
-            System.out.print(", Salary: "+resultSet1.getDouble("salary"));
-            System.out.print(", Basepay: "+resultSet1.getDouble("Basepay"));
-            System.out.println();
-        }
+//
+
+//        ResultSet resultSet1=stmt.executeQuery("select * from employee_payroll");
+//        while(resultSet1.next()){
+//            System.out.print("Id: "+resultSet1.getInt("id"));
+//            System.out.print(", name: "+resultSet1.getString("name"));
+//            System.out.print(", Salary: "+resultSet1.getDouble("salary"));
+//            System.out.print(", Basepay: "+resultSet1.getDouble("Basepay"));
+//            System.out.println(", Start Date"+resultSet1.getDate("start_date"));
+//            System.out.println();
+//        }
 //        System.out.println("Record Added...!");
         conn.close();
     }
